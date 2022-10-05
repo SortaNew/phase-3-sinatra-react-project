@@ -47,7 +47,7 @@ class ApplicationController < Sinatra::Base
     review.to_json
   end
 
-  post "/reviews/:id" do
+  post "/reviews" do
     review = Review.create(
       user_id: params[:user_id],
       location_id: params[:location_id],
@@ -82,7 +82,7 @@ class ApplicationController < Sinatra::Base
     user.to_json
   end
 
-  post "/users/:id" do
+  post "/users" do
     user = User.create(
       username: params[:username],
       password: params[:password],
