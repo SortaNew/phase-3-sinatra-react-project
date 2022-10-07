@@ -7,10 +7,11 @@ class ApplicationController < Sinatra::Base
   end
 
   get "/locations/:id" do
-    Location.find(params[:id]).to_json
+    location = Location.find(params[:id])
+    {location: location, reviews: location.reviews}.to_json
   end
 
-  post "/locations/:id" do
+  post "/locations" do
     location = Location.create(
       location_name: params[:location_name],
       address: params[:address],
@@ -39,7 +40,7 @@ class ApplicationController < Sinatra::Base
 
   get "/reviews" do
     reviews = Review.all
-    review.to_json
+    reviews.to_json
   end
 
   get "/reviews/:id" do
@@ -56,17 +57,30 @@ class ApplicationController < Sinatra::Base
     review.to_json
   end
 
-  patch "reviews/:id" do
+  patch "/reviews/:id" do
     review = Review.find(params[:id])
-    review.update(
-      # user_id: params[:user_id],
-      location_id: params[:location_id],
-      description: params[:description],
-    )
-    review.to_json
+    if review.user_id != params[:user_id]
+      {error: "unAuthorized you dont own this post"}.to_json
+    else
+      review.update(
+        # user_id: params[:user_id],
+        description: params[:description],
+      )
+      review.to_json
+
+    end
   end
 
-  delete "reviews/:id" do
+  post "/login" do 
+    user = User.find_by!(username:params[:username])
+    if user.password == params[:password]
+      user.to_json
+    else
+      {message: "bad password"}.to_json
+    end
+  end
+
+  delete "/reviews/:id" do
     review = Review.find(params[:id])
     review.destroy
     review.to_json
