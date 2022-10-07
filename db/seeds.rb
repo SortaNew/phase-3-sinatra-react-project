@@ -1,4 +1,9 @@
+User.destroy_all
+Location.destroy_all
+Review.destroy_all
+
 puts "🌱 Seeding users..."
+User.create(username: "test", password: "123")
 u1 = User.create(username: "leslie_newman", password: "password123")
 u2 = User.create(username: "ColinSwanson", password: "Swanson1!")
 u3 = User.create(username: "kristi.ortega", password: "kitt3ns$1")
